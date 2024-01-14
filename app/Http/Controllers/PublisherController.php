@@ -10,25 +10,28 @@ class PublisherController extends Controller
 
     public function __construct()
     {
-        // Inicializa os dados de exemplo
-        $this->publishers = [
-            1 => ['name' => 'Editora 1', 'foundation_year' => 1975],
-            2 => ['name' => 'Editora 2', 'foundation_year' => 1988],
-            3 => ['name' => 'Editora 3', 'foundation_year' => 1995],
-            4 => ['name' => 'Editora 4', 'foundation_year' => 2000],
-            5 => ['name' => 'Editora 5', 'foundation_year' => 1982],
-            // Adicione mais editoras conforme necessário
-        ];
+        if (!session()->has('publishers')) {
+            session(['publishers' => [
+                1 => ['name' => 'Editora 1', 'foundation_year' => 1975],
+                2 => ['name' => 'Editora 2', 'foundation_year' => 1988],
+                3 => ['name' => 'Editora 3', 'foundation_year' => 1995],
+                4 => ['name' => 'Editora 4', 'foundation_year' => 2000],
+                5 => ['name' => 'Editora 5', 'foundation_year' => 1982],
+                // Adicione mais editoras conforme necessário
+            ]]);
+        }
     }
 
     public function index()
     {
-        return view('publishers.index', ['publishers' => $this->publishers]);
+        $publishers = session('publishers');
+        return view('publishers.index', ['publishers' => $publishers]);
     }
 
     public function show($id)
     {
-        $publisher = $this->publishers[$id] ?? null;
+        $publishers = session('publishers');
+        $publisher = $publishers[$id] ?? null;
         return view('publishers.show', ['publisher' => $publisher]);
     }
 
@@ -39,26 +42,40 @@ class PublisherController extends Controller
 
     public function store(Request $request)
     {
-        $newId = max(array_keys($this->publishers)) + 1;
-        $this->publishers[$newId] = $request->all();
+        $publishers = session('publishers', []);
+        $newId = count($publishers) > 0 ? max(array_keys($publishers)) + 1 : 1;
+        $publishers[$newId] = $request->all();
+        session(['publishers' => $publishers]);
+
         return redirect('/publishers');
     }
 
     public function edit($id)
     {
-        $publisher = $this->publishers[$id] ?? null;
+        $publishers = session('publishers');
+        $publisher = $publishers[$id] ?? null;
         return view('publishers.edit', ['publisher' => $publisher, 'id' => $id]);
     }
 
     public function update(Request $request, $id)
     {
-        $this->publishers[$id] = $request->all();
+        $publishers = session('publishers', []);
+        if (isset($publishers[$id])) {
+            $publishers[$id] = $request->all();
+            session(['publishers' => $publishers]);
+        }
+
         return redirect('/publishers');
     }
 
     public function destroy($id)
     {
-        unset($this->publishers[$id]);
+        $publishers = session('publishers', []);
+        if (isset($publishers[$id])) {
+            unset($publishers[$id]);
+            session(['publishers' => $publishers]);
+        }
+
         return redirect('/publishers');
     }
 }
