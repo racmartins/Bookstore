@@ -31,4 +31,36 @@ class BookController extends Controller
         $book = $this->books[$id] ?? null;
         return view('books.show', ['book' => $book]);
     }
+
+    public function create()
+    {
+        return view('books.create');
+    }
+
+    public function store(Request $request)
+    {
+        $newId = max(array_keys($this->books)) + 1;
+        $this->books[$newId] = $request->all();
+        return redirect('/books');
+    }
+
+    public function edit($id)
+    {
+        $book = $this->books[$id] ?? null;
+        return view('books.edit', ['book' => $book, 'id' => $id]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $this->books[$id] = $request->all();
+        return redirect('/books');
+    }
+
+    public function destroy($id)
+    {
+        unset($this->books[$id]);
+
+        // Redireciona para a rota inicial após a remoção
+        return redirect('/books');
+    }
 }

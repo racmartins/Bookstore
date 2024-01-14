@@ -31,4 +31,34 @@ class PublisherController extends Controller
         $publisher = $this->publishers[$id] ?? null;
         return view('publishers.show', ['publisher' => $publisher]);
     }
+
+    public function create()
+    {
+        return view('publishers.create');
+    }
+
+    public function store(Request $request)
+    {
+        $newId = max(array_keys($this->publishers)) + 1;
+        $this->publishers[$newId] = $request->all();
+        return redirect('/publishers');
+    }
+
+    public function edit($id)
+    {
+        $publisher = $this->publishers[$id] ?? null;
+        return view('publishers.edit', ['publisher' => $publisher, 'id' => $id]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $this->publishers[$id] = $request->all();
+        return redirect('/publishers');
+    }
+
+    public function destroy($id)
+    {
+        unset($this->publishers[$id]);
+        return redirect('/publishers');
+    }
 }

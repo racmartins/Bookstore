@@ -31,4 +31,34 @@ class AuthorController extends Controller
         $author = $this->authors[$id] ?? null;
         return view('authors.show', ['author' => $author]);
     }
+
+    public function create()
+    {
+        return view('authors.create');
+    }
+
+    public function store(Request $request)
+    {
+        $newId = max(array_keys($this->authors)) + 1;
+        $this->authors[$newId] = $request->all();
+        return redirect('/authors');
+    }
+
+    public function edit($id)
+    {
+        $author = $this->authors[$id] ?? null;
+        return view('authors.edit', ['author' => $author, 'id' => $id]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $this->authors[$id] = $request->all();
+        return redirect('/authors');
+    }
+
+    public function destroy($id)
+    {
+        unset($this->authors[$id]);
+        return redirect('/authors');
+    }
 }
