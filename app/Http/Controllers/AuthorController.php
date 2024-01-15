@@ -6,31 +6,35 @@ use Illuminate\Http\Request;
 
 class AuthorController extends Controller
 {
-    private $authors;
+    private $authorsFile;
 
     public function __construct()
     {
-        if (!session()->has('authors')) {
-            session(['authors' => [
-                1 => ['name' => 'Autor 1', 'birth_year' => 1980],
-                2 => ['name' => 'Autor 2', 'birth_year' => 1990],
-                3 => ['name' => 'Autor 3', 'birth_year' => 1985],
-                4 => ['name' => 'Autor 4', 'birth_year' => 1978],
-                5 => ['name' => 'Autor 5', 'birth_year' => 1995],
-                // Adicione mais autores conforme necessário
-            ]]);
+        $this->authorsFile = storage_path('app/authors.json');
+        if (!file_exists($this->authorsFile)) {
+            file_put_contents($this->authorsFile, json_encode([]));
         }
+    }
+
+    private function getAuthors()
+    {
+        return json_decode(file_get_contents($this->authorsFile), true);
+    }
+
+    private function saveAuthors($authors)
+    {
+        file_put_contents($this->authorsFile, json_encode($authors, JSON_PRETTY_PRINT));
     }
 
     public function index()
     {
-        $authors = session('authors');
+        $authors = $this->getAuthors();
         return view('authors.index', ['authors' => $authors]);
     }
 
     public function show($id)
     {
-        $authors = session('authors');
+        $authors = $this->getAuthors();
         $author = $authors[$id] ?? null;
         return view('authors.show', ['author' => $author]);
     }
@@ -42,35 +46,39 @@ class AuthorController extends Controller
 
     public function store(Request $request)
     {
-        $authors = session('authors');
+        $authors = $this->getAuthors();
         $newId = count($authors) > 0 ? max(array_keys($authors)) + 1 : 1;
         $authors[$newId] = $request->all();
-        session(['authors' => $authors]);
+        $this->saveAuthors($authors);
 
         return redirect('/authors');
     }
 
     public function edit($id)
     {
-        $authors = session('authors');
+        $authors = $this->getAuthors();
         $author = $authors[$id] ?? null;
         return view('authors.edit', ['author' => $author, 'id' => $id]);
     }
 
     public function update(Request $request, $id)
     {
-        $authors = session('authors');
-        $authors[$id] = $request->all();
-        session(['authors' => $authors]);
+        $authors = $this->getAuthors();
+        if (isset($authors[$id])) {
+            $authors[$id] = $request->all();
+            $this->saveAuthors($authors);
+        }
 
         return redirect('/authors');
     }
 
     public function destroy($id)
     {
-        $authors = session('authors');
-        unset($authors[$id]);
-        session(['authors' => $authors]);
+        $authors = $this->getAuthors();
+        if (isset($authors[$id])) {
+            unset($authors[$id]);
+            $this->saveAuthors($authors);
+        }
 
         return redirect('/authors');
     }
