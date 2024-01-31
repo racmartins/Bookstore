@@ -12,6 +12,6 @@ class PublishersTableSeeder extends Seeder
 {
     public function run()
     {
-        Publisher::factory()->count(200)->create();
+        Publisher::factory()->count(300)->create();
     }
 }

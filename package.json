@@ -3,7 +3,10 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "post-update-cmd": [
+            "@php artisan laravel-portugal:locale-publish --force"
+        ]
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.2",

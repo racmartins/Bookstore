@@ -2,41 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Publisher;
 use Illuminate\Http\Request;
 
 class PublisherController extends Controller
 {
-    private $publishersFile;
-
-    public function __construct()
-    {
-        $this->publishersFile = storage_path('app/publishers.json');
-        if (!file_exists($this->publishersFile)) {
-            file_put_contents($this->publishersFile, json_encode([]));
-        }
-    }
-
-    private function getPublishers()
-    {
-        return json_decode(file_get_contents($this->publishersFile), true);
-    }
-
-    private function savePublishers($publishers)
-    {
-        file_put_contents($this->publishersFile, json_encode($publishers, JSON_PRETTY_PRINT));
-    }
-
     public function index()
     {
-        $publishers = $this->getPublishers();
-        return view('publishers.index', ['publishers' => $publishers]);
-    }
-
-    public function show($id)
-    {
-        $publishers = $this->getPublishers();
-        $publisher = $publishers[$id] ?? null;
-        return view('publishers.show', ['publisher' => $publisher]);
+        //$publishers = Publisher::all();
+        $publishers = Publisher::paginate(15);
+        return view('publishers.index', compact('publishers'));
     }
 
     public function create()
@@ -46,40 +21,51 @@ class PublisherController extends Controller
 
     public function store(Request $request)
     {
-        $publishers = $this->getPublishers();
-        $newId = count($publishers) > 0 ? max(array_keys($publishers)) + 1 : 1;
-        $publishers[$newId] = $request->all();
-        $this->savePublishers($publishers);
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+            // Adicione outras validações necessárias para o modelo Publisher
+        ]);
 
-        return redirect('/publishers');
+        Publisher::create($validatedData);
+        return redirect('/publishers')->with('success', 'Editora adicionada com sucesso.');
+    }
+
+    public function show($id)
+    {
+        $publisher = Publisher::findOrFail($id);
+        return view('publishers.show', compact('publisher'));
     }
 
     public function edit($id)
     {
-        $publishers = $this->getPublishers();
-        $publisher = $publishers[$id] ?? null;
-        return view('publishers.edit', ['publisher' => $publisher, 'id' => $id]);
+        $publisher = Publisher::findOrFail($id);
+        return view('publishers.edit', compact('publisher'));
     }
 
     public function update(Request $request, $id)
     {
-        $publishers = $this->getPublishers();
-        if (isset($publishers[$id])) {
-            $publishers[$id] = $request->all();
-            $this->savePublishers($publishers);
-        }
+    $validatedData = $request->validate([
+        'title' => [
+            'required',
+            'max:255',
+            Rule::unique('books')->ignore($id)->where(function ($query) use ($request) {
+                return $query->where('author_id', $request->author_id);
+            }),
+        ],
+        'author_id' => 'required|exists:authors,id',
+        // Adicione outras validações necessárias para o modelo Book
+    ]);
 
-        return redirect('/publishers');
+    $book = Book::findOrFail($id);
+    $book->update($validatedData);
+
+    return redirect('/books')->with('success', 'Livro atualizado com sucesso.');
     }
 
     public function destroy($id)
     {
-        $publishers = $this->getPublishers();
-        if (isset($publishers[$id])) {
-            unset($publishers[$id]);
-            $this->savePublishers($publishers);
-        }
-
-        return redirect('/publishers');
+        $publisher = Publisher::findOrFail($id);
+        $publisher->delete();
+        return redirect('/publishers')->with('success', 'Editora removida com sucesso.');
     }
 }

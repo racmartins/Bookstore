@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('authors', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->timestamps(); // Cria os campos created_at e updated_at
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('profile_photo')->nullable()->after('email');
         });
     }
 
@@ -23,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('authors');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('profile_photo');
+        });
     }
 };

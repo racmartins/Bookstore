@@ -5,52 +5,80 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bookstore</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar-brand {
+            margin-right: 150px; /* Ajuste o valor conforme necessário */
+        }
+        .nav-profile {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-profile img {
+            margin-right: 8px;
+        }
+
+        .logo {
+            filter: brightness(90%); /* Ajuste o valor conforme necessário */
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-4">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="{{ url('/dashboard') }}">Bookstore</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/books') }}">Livros</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url('/dashboard') }}">
+                <img src="{{ asset('images/logo.svg') }}" alt="Logo" style="height: 30px;" class="logo">
+                <span class="ms-2 text-white" >Bookstore</span>
+            </a>
+            <!-- Botão de colapso para dispositivos móveis -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link mx-3 text-white" href="{{ url('/books') }}">Livros</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link mx-3 text-white" href="{{ url('/authors') }}">Autores</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link mx-3 text-white" href="{{ url('/publishers') }}">Editoras</a>
+                    </li>
+                </ul>
+                @auth
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item dropdown nav-profile">
+                            <!-- Imagem de perfil -->
+                            @if (Auth::user()->profile_photo)
+                                <img src="{{ asset(Auth::user()->profile_photo) }}" alt="Foto do Perfil" class="rounded-circle" style="width: 30px; height: 30px; object-fit: cover;">
+                            @endif
+                            <!-- Link para ativar o dropdown -->
+                            <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ Auth::user()->name }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="{{ route('profile.show') }}">Ver Perfil</a></li>
+                                <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Editar Perfil</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item">Sair</button>
+                                    </form>
+                                </li>
+                            </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/authors') }}">Autores</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/publishers') }}">Editoras</a>
-                        </li>
-                        <!-- Opções do Utilizador -->
-                        @auth
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    {{ Auth::user()->name }}
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Editar Perfil</a></li>
-                                    <li>
-                                        <form method="POST" action="{{ route('logout') }}">
-                                            @csrf
-                                            <button type="submit" class="dropdown-item">Logout</button>
-                                        </form>
-                                    </li>
-                                </ul>
-                            </li>
-                        @endauth
                     </ul>
-                </div>
+                @endauth
             </div>
-        </nav>
+        </div>
+    </nav>
 
+    <div class="container mt-4">
         @yield('content')
     </div>
 
-    <!-- Bootstrap JS (inclui Popper.js) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

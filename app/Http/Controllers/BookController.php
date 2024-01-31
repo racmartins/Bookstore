@@ -2,76 +2,87 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Book;
+use App\Models\Author;
+use App\Models\Publisher;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule; // Adicionado
 
 class BookController extends Controller
 {
-    private $booksFile;
-
-    public function __construct()
-    {
-        $this->booksFile = storage_path('app/books.json');
-    }
-
-    private function getBooks()
-    {
-        return json_decode(file_get_contents($this->booksFile), true);
-    }
-
-    private function saveBooks($books)
-    {
-        file_put_contents($this->booksFile, json_encode($books, JSON_PRETTY_PRINT));
-    }
-
     public function index()
     {
-        $books = $this->getBooks();
-        return view('books.index', ['books' => $books]);
-    }
-
-    public function show($id)
-    {
-        $books = $this->getBooks();
-        $book = $books[$id] ?? null;
-        return view('books.show', ['book' => $book]);
+        //$books = Book::all();
+        $books = Book::paginate(15);
+        return view('books.index', compact('books'));
     }
 
     public function create()
     {
-        return view('books.create');
+        $authors = Author::all(); // Buscando todos os autores
+        $publishers = Publisher::all(); // Buscando todas as editoras
+        return view('books.create', compact('authors', 'publishers'));
     }
 
     public function store(Request $request)
     {
-        $books = $this->getBooks();
-        $newId = count($books) > 0 ? max(array_keys($books)) + 1 : 1;
-        $books[$newId] = $request->all();
-        $this->saveBooks($books);
+        //Validação de dados no formulário
+        $validatedData = $request->validate([
+            'title' => 'required|max:255',
+            'author_id' => 'required|exists:authors,id',
+            'publisher_id' => 'required|exists:publishers,id',
+            'price' => 'required|numeric',
+            // Outras regras de validação para campos adicionais
+        ]);
 
-        return redirect('/books');
+        // Cria um novo livro na base de dados usando os dados validados
+        Book::create($validatedData);
+
+        // Redireciona de volta à lista de livros com uma mensagem de sucesso
+        return redirect('/books')->with('success', 'Livro adicionado com sucesso.');
     }
+    public function show($id)
+    {
+        // Busca o livro com o ID fornecido, ou lança uma exceção se não o encontrar
+        $book = Book::findOrFail($id);
+
+         // Retorna a view 'books.show', passando o livro como uma variável
+        return view('books.show', compact('book'));
+    }
+
     public function edit($id)
     {
-        $books = $this->getBooks();
-        $book = $books[$id] ?? null;
-        return view('books.edit', ['book' => $book, 'id' => $id]);
+        // Busca o livro com o ID fornecido, ou lança uma exceção se não encontrar
+        $book = Book::findOrFail($id);
+
+        // Obtém todos os autores disponíveis
+        $authors = Author::all();
+
+        // Obtém todas as editoras disponíveis
+        $publishers = Publisher::all();
+
+        // Retorna a view 'books.edit', passando o livro, autores e editoras como variáveis
+        return view('books.edit', compact('book','authors','publishers'));
     }
 
     public function update(Request $request, $id)
     {
-        $books = $this->getBooks();
-        $books[$id] = $request->all();
-        $this->saveBooks($books);
+        $validatedData = $request->validate([
+            'title' => 'required|max:255',
+            'author_id' => 'required|exists:authors,id',
+            'publisher_id' => 'required|exists:publishers,id',
+            'price' => 'required|numeric',
+            // Outras regras de validação para campos adicionais
+        ]);
 
-        return redirect('/books');
+        Book::whereId($id)->update($validatedData);
+        return redirect('/books')->with('success', 'Livro atualizado com sucesso.');
     }
 
     public function destroy($id)
     {
-        $books = $this->getBooks();
-        unset($books[$id]);
-        $this->saveBooks($books);
-
-        return redirect('/books');
+        $book = Book::findOrFail($id);
+        $book->delete();
+        return redirect('/books')->with('success', 'Livro removido com sucesso.');
     }
 }

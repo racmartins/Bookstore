@@ -1,21 +1,57 @@
+{{-- resources/views/books/create.blade.php --}}
+
 @extends('layouts.app')
 
 @section('content')
-    <h1>Criar Novo Livro</h1>
-    <form method="POST" action="{{ url('/books') }}">
+<div class="container">
+    <h1>Adicionar Novo Livro</h1>
+
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form action="{{ route('books.store') }}" method="POST">
         @csrf
-        <div class="form-group">
-            <label for="title">Título:</label>
+
+        <div class="mb-3">
+            <label for="title" class="form-label">Título</label>
             <input type="text" class="form-control" id="title" name="title" required>
         </div>
-        <div class="form-group">
-            <label for="author">Autor:</label>
-            <input type="text" class="form-control" id="author" name="author" required>
+
+        <div class="mb-3">
+            <label for="author_id" class="form-label">Autor</label>
+            <select class="form-control" id="author_id" name="author_id" required>
+                <option value="">Selecione um Autor</option>
+                @foreach ($authors as $author)
+                    <option value="{{ $author->id }}">{{ $author->name }}</option>
+                @endforeach
+            </select>
         </div>
-        <div class="form-group">
-            <label for="price">Preço:</label>
+
+        <div class="mb-3">
+            <label for="publisher_id" class="form-label">Editora</label>
+            <select class="form-control" id="publisher_id" name="publisher_id" required>
+                <option value="">Selecione uma Editora</option>
+                @foreach ($publishers as $publisher)
+                    <option value="{{ $publisher->id }}">{{ $publisher->name }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="price" class="form-label">Preço</label>
             <input type="number" class="form-control" id="price" name="price" step="0.01" required>
         </div>
-        <button type="submit" class="btn btn-primary">Criar Livro</button>
+
+        <button type="submit" class="btn btn-primary">Adicionar Livro</button>
     </form>
+</div>
 @endsection
+
+

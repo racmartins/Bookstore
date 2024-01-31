@@ -1,85 +1,84 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use App\Models\Author;
 use Illuminate\Http\Request;
 
 class AuthorController extends Controller
 {
-    private $authorsFile;
-
-    public function __construct()
-    {
-        $this->authorsFile = storage_path('app/authors.json');
-        if (!file_exists($this->authorsFile)) {
-            file_put_contents($this->authorsFile, json_encode([]));
-        }
-    }
-
-    private function getAuthors()
-    {
-        return json_decode(file_get_contents($this->authorsFile), true);
-    }
-
-    private function saveAuthors($authors)
-    {
-        file_put_contents($this->authorsFile, json_encode($authors, JSON_PRETTY_PRINT));
-    }
-
+    // Exibe uma lista de autores
     public function index()
     {
-        $authors = $this->getAuthors();
-        return view('authors.index', ['authors' => $authors]);
+        //$authors = Author::all();
+
+        // Carregando os livros relacionados para cada autor e paginando os resultados
+        $authors = Author::with('books')->paginate(15);
+
+        return view('authors.index', compact('authors'));
     }
 
-    public function show($id)
-    {
-        $authors = $this->getAuthors();
-        $author = $authors[$id] ?? null;
-        return view('authors.show', ['author' => $author]);
-    }
-
+    // Mostra o formulário para criar um novo autor
     public function create()
     {
         return view('authors.create');
     }
 
+    // Armazena um autor recém-criado na base de dados
     public function store(Request $request)
     {
-        $authors = $this->getAuthors();
-        $newId = count($authors) > 0 ? max(array_keys($authors)) + 1 : 1;
-        $authors[$newId] = $request->all();
-        $this->saveAuthors($authors);
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+            'birth_date' => 'sometimes|min:10', // O 'sometimes' é para permitir mas não requerer o campo
+            // Outros campos, como 'bio', podem ser incluídos aqui
+        ]);
 
-        return redirect('/authors');
+        $author = Author::create($validatedData);
+        return redirect()->route('authors.index')->with('success', 'Autor criado com sucesso!');
     }
 
-    public function edit($id)
+    // Exibe um autor específico
+    public function show(Author $author)
     {
-        $authors = $this->getAuthors();
-        $author = $authors[$id] ?? null;
-        return view('authors.edit', ['author' => $author, 'id' => $id]);
+        return view('authors.show', compact('author'));
     }
 
-    public function update(Request $request, $id)
+    // Mostra o formulário para editar um autor existente
+    public function edit(Author $author)
     {
-        $authors = $this->getAuthors();
-        if (isset($authors[$id])) {
-            $authors[$id] = $request->all();
-            $this->saveAuthors($authors);
-        }
-
-        return redirect('/authors');
+        return view('authors.edit', compact('author'));
     }
 
+    // Atualiza um autor no banco de dados
+    public function update(Request $request, Author $author)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+            'birth_date' => 'sometimes|min:10', // O 'sometimes' é para permitir mas não requerer o campo
+            // Outros campos, como 'bio', podem ser incluídos aqui
+        ]);
+
+        $author->update($validatedData);
+        return redirect()->route('authors.index')->with('success', 'Autor atualizado com sucesso!');
+    }
+
+    // Remove um autor da base de dados
     public function destroy($id)
     {
-        $authors = $this->getAuthors();
-        if (isset($authors[$id])) {
-            unset($authors[$id]);
-            $this->saveAuthors($authors);
-        }
+        $author = Author::find($id);
 
-        return redirect('/authors');
+        // Opção 1: Remover todos os livros relacionados
+        // $author->books()->delete();
+
+        // Opção 2: Atualizar os livros relacionados para não ter um autor
+        // $author->books()->update(['author_id' => null]);
+
+        // Desassocia os livros do autor
+        $author->books()->update(['author_id' => null]);
+
+        $author->delete();
+        return redirect()->route('authors.index')->with('success', 'Autor excluído com sucesso!');
     }
 }
+
+
+

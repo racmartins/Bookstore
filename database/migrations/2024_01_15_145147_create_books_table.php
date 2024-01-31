@@ -18,10 +18,10 @@ return new class extends Migration
             $table->unsignedBigInteger('author_id');
             $table->unsignedBigInteger('publisher_id');
             $table->timestamps();
-        
+
             $table->foreign('author_id')->references('id')->on('authors');
             $table->foreign('publisher_id')->references('id')->on('publishers');
-        });     
+        });
     }
 
     /**

@@ -12,6 +12,15 @@ use Illuminate\View\View;
 class ProfileController extends Controller
 {
     /**
+     * Display the user's profile view.
+     */
+    public function show()
+    {
+        $user = Auth::user(); // Obter o utilizador autenticado
+        return view('profile.show', compact('user'));
+    }
+
+    /**
      * Display the user's profile form.
      */
     public function edit(Request $request): View
@@ -24,15 +33,33 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(Request $request)
     {
-        $request->user()->fill($request->validated());
+        $validatedData = $request->validate([
+            'profile_photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            // Adicione validações para outros campos se necessário
+        ]);
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $user = $request->user();
+
+        // Processar e guardar da foto do perfil
+        if ($request->hasFile('profile_photo')) {
+            $imageName = time() . '.' . $request->profile_photo->extension();
+            $request->profile_photo->move(public_path('images'), $imageName);
+
+            // Guardar o caminho da imagem na base de dados ou armazenamento
+            $user->profile_photo = 'images/' . $imageName;
         }
 
-        $request->user()->save();
+        // Atualizar outros campos do perfil
+        $user->fill($validatedData);
+
+        // Verificar se o e-mail foi alterado e redefinir 'email_verified_at'
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
+
+        $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
