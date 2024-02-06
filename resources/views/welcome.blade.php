@@ -4,83 +4,86 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Livraria Online</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-    <!-- Styles -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;800&display=swap" rel="stylesheet">
+    <!-- Custom Styles -->
     <style>
-        html, body {
-            background-color: #fff;
-            color: #636b6f;
+        body {
             font-family: 'Nunito', sans-serif;
-            font-weight: 200;
-            height: 100vh;
-            margin: 0;
-        }
-        .full-height {
-            height: 100vh;
-        }
-        .flex-center {
-            align-items: center;
-            display: flex;
-            justify-content: center;
-        }
-        .position-ref {
-            position: relative;
-        }
-        .top-right {
-            position: absolute;
-            right: 10px;
-            top: 18px;
-        }
-        .content {
-            text-align: center;
+            background-color: #f0f2f5;
         }
         .title {
-            font-size: 84px;
+            font-size: 72px; /* Aumentado para maior destaque */
+            color: #212529;
         }
-        .links > a {
-            color: #636b6f;
-            padding: 0 25px;
-            font-size: 13px;
-            font-weight: 600;
-            letter-spacing: .1rem;
-            text-decoration: none;
-            text-transform: uppercase;
+        .lead {
+            font-size: 24px; /* Aumentado para melhor visibilidade */
         }
-        .m-b-md {
-            margin-bottom: 30px;
+        .bookstore-image {
+            max-width: 400px; /* Ajustado conforme solicitação */
+            height: auto;
+            margin-bottom: 20px; /* Espaçamento entre a imagem e o título */
+        }
+        .btn-custom {
+            padding: 10px 20px; /* Mais espaço para conforto no clique */
+            font-size: 18px; /* Tamanho aumentado para fácil leitura */
+        }
+        .register-invitation {
+            margin-top: 40px;
+            font-size: 20px;
         }
     </style>
 </head>
 <body>
-    <div class="flex-center position-ref full-height">
-        @if (Route::has('login'))
-            <div class="top-right links">
-                @auth
-                    <a href="{{ url('/home') }}">Home</a>
-                @else
-                    <a href="{{ route('login') }}">Login</a>
-
-                    @if (Route::has('register'))
-                        <a href="{{ route('register') }}">Registar</a>
-                    @endif
-                @endauth
-            </div>
-        @endif
-
-        <div class="content">
-            <div class="title m-b-md">
-                Livraria Online
-            </div>
-
-            <p>Bem-vindo à sua próxima aventura literária!</p>
-
-            <div class="links">
-                <a href="/livros">Livros</a>
-                <a href="/sobre">Sobre Nós</a>
-                <a href="/contacto">Contacto</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">Livraria Online</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    @auth
+                        <li class="nav-item">
+                            <a href="{{ url('/home') }}" class="nav-link">Home</a>
+                        </li>
+                    @else
+                        <li class="nav-item">
+                            <a href="{{ route('login') }}" class="nav-link">Login</a>
+                        </li>
+                        @if (Route::has('register'))
+                            <li class="nav-item">
+                                <a href="{{ route('register') }}" class="nav-link">Registar</a>
+                            </li>
+                        @endif
+                    @endauth
+                </ul>
             </div>
         </div>
+    </nav>
+
+    <div class="container text-center mt-5 pt-5">
+        <img src="{{ asset('images/books.jpg') }}" alt="Livraria Online" class="bookstore-image">
+        <h1 class="title m-b-md">Livraria Online</h1>
+        <p class="lead">Bem-vindo à sua próxima aventura literária!</p>
+        <div class="links my-4">
+            <a href="{{route('books.featured')}}" class="btn btn-outline-primary btn-custom">Livros</a>
+            <a href="/sobre" class="btn btn-outline-secondary btn-custom">Sobre Nós</a>
+            <a href="{{ route('contact.create') }}" class="btn btn-outline-info btn-custom">Contacto</a>
+
+        </div>
+        @guest
+            <div class="register-invitation">
+                <p>Ainda não é membro? Considere a possibilidade de tornar-se membro solicitando-o aqui:</p>
+                <a href="{{ route('contact.create') }}?preencher=mensagem" class="btn btn-success btn-custom">Criar Membro</a>
+
+
+            </div>
+        @endguest
     </div>
 </body>
 </html>
+
+

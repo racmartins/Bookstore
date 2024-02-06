@@ -20,6 +20,10 @@ class Book extends Model
     {
         return $this->belongsTo(Publisher::class);
     }
+    public function scopeFeatured($query)
+    {
+        return $query->where('is_featured', true);
+    }
 
     // Método auxiliar para formatar o preço
     public function formattedPrice()

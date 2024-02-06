@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth; // Importar o Auth facade
 use App\Models\Author;
 use Illuminate\Http\Request;
 
@@ -20,6 +21,9 @@ class AuthorController extends Controller
     // Mostra o formulário para criar um novo autor
     public function create()
     {
+        if (Auth::user()->role != 'admin') {
+            return redirect()->route('authors.index')->with('error', 'Acesso negado.');
+        }
         return view('authors.create');
     }
 
@@ -45,10 +49,13 @@ class AuthorController extends Controller
     // Mostra o formulário para editar um autor existente
     public function edit(Author $author)
     {
+        if (Auth::user()->role != 'admin') {
+            return redirect()->route('authors.index')->with('error', 'Acesso negado.');
+        }
         return view('authors.edit', compact('author'));
     }
 
-    // Atualiza um autor no banco de dados
+    // Atualiza um autor na base de dados
     public function update(Request $request, Author $author)
     {
         $validatedData = $request->validate([
@@ -66,6 +73,10 @@ class AuthorController extends Controller
     {
         $author = Author::find($id);
 
+        if (Auth::user()->role != 'admin') {
+            return redirect()->route('authors.index')->with('error', 'Acesso negado.');
+        }
+
         // Opção 1: Remover todos os livros relacionados
         // $author->books()->delete();
 
@@ -78,6 +89,12 @@ class AuthorController extends Controller
         $author->delete();
         return redirect()->route('authors.index')->with('success', 'Autor excluído com sucesso!');
     }
+
+
+    
+    
+    
+
 }
 
 

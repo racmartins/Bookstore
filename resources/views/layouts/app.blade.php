@@ -45,6 +45,22 @@
                     <li class="nav-item">
                         <a class="nav-link mx-3 text-white" href="{{ url('/publishers') }}">Editoras</a>
                     </li>
+                    <!-- Link de gestão de contactos visível apenas para administradores -->
+                    @auth
+                        @if (Auth::user()->role === 'admin')
+                            <li class="nav-item">
+                                <a class="nav-link mx-3 text-white" href="{{ route('contacts.index') }}">Gestão de Contactos</a>
+                            </li>
+                        @endif
+                    @endauth
+                    <!-- Link de gestão de utilizadores visível apenas para administradores -->
+                    @auth
+                        @if (Auth::user()->role === 'admin')
+                            <li class="nav-item">
+                                <a class="nav-link mx-3 text-white" href="{{ route('manage-users.index') }}">Gestão de Utilizadores</a>
+                            </li>
+                        @endif
+                    @endauth
                 </ul>
                 @auth
                     <ul class="navbar-nav ms-auto">

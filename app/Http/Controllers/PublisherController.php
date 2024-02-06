@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Publisher;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class PublisherController extends Controller
 {
@@ -44,28 +45,23 @@ class PublisherController extends Controller
 
     public function update(Request $request, $id)
     {
-    $validatedData = $request->validate([
-        'title' => [
-            'required',
-            'max:255',
-            Rule::unique('books')->ignore($id)->where(function ($query) use ($request) {
-                return $query->where('author_id', $request->author_id);
-            }),
-        ],
-        'author_id' => 'required|exists:authors,id',
-        // Adicione outras validações necessárias para o modelo Book
-    ]);
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+            'foundation_year' => 'nullable|numeric',
+        ]);
 
-    $book = Book::findOrFail($id);
-    $book->update($validatedData);
+        $publisher = Publisher::findOrFail($id);
+        $publisher->update($validatedData);
 
-    return redirect('/books')->with('success', 'Livro atualizado com sucesso.');
+        // Redireciona para a rota index com uma mensagem de sucesso
+        return redirect()->route('publishers.index')->with('success', 'Editora atualizada com sucesso.');
     }
 
     public function destroy($id)
     {
         $publisher = Publisher::findOrFail($id);
-        $publisher->delete();
+        $publisher->delete(); // Isto agora é um Soft Delete
         return redirect('/publishers')->with('success', 'Editora removida com sucesso.');
     }
 }
+
