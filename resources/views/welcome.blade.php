@@ -1,86 +1,24 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Livraria Online</title>
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-    <!-- Styles -->
-    <style>
-        html, body {
-            background-color: #fff;
-            color: #636b6f;
-            font-family: 'Nunito', sans-serif;
-            font-weight: 200;
-            height: 100vh;
-            margin: 0;
-        }
-        .full-height {
-            height: 100vh;
-        }
-        .flex-center {
-            align-items: center;
-            display: flex;
-            justify-content: center;
-        }
-        .position-ref {
-            position: relative;
-        }
-        .top-right {
-            position: absolute;
-            right: 10px;
-            top: 18px;
-        }
-        .content {
-            text-align: center;
-        }
-        .title {
-            font-size: 84px;
-        }
-        .links > a {
-            color: #636b6f;
-            padding: 0 25px;
-            font-size: 13px;
-            font-weight: 600;
-            letter-spacing: .1rem;
-            text-decoration: none;
-            text-transform: uppercase;
-        }
-        .m-b-md {
-            margin-bottom: 30px;
-        }
-    </style>
-</head>
-<body>
-    <div class="flex-center position-ref full-height">
-        @if (Route::has('login'))
-            <div class="top-right links">
-                @auth
-                    <a href="{{ url('/home') }}">Home</a>
-                @else
-                    <a href="{{ route('login') }}">Login</a>
+{{-- resources/views/welcome.blade.php --}}
 
-                    @if (Route::has('register'))
-                        <a href="{{ route('register') }}">Registar</a>
-                    @endif
-                @endauth
-            </div>
-        @endif
+@extends('layouts.public')
 
-        <div class="content">
-            <div class="title m-b-md">
-                Livraria Online
-            </div>
+@section('title', 'Livraria Online')
 
-            <p>Bem-vindo à sua próxima aventura literária!</p>
-
-            <div class="links">
-                <a href="/livros">Livros</a>
-                <a href="/sobre">Sobre Nós</a>
-                <a href="/contacto">Contacto</a>
-            </div>
+@section('content')
+    <div class="text-center mt-5 pt-5">
+        <img src="{{ asset('images/books.jpg') }}" alt="Livraria Online" class="bookstore-image">
+        <h1 class="title m-b-md">Livraria Online</h1>
+        <p class="lead">Bem-vindo à sua próxima aventura literária!</p>
+        <div class="links my-4">
+            <a href="{{ route('books.featured') }}" class="btn btn-outline-primary btn-custom">Livros</a>
+            <a href="/sobre" class="btn btn-outline-secondary btn-custom">Sobre Nós</a>
+            <a href="{{ route('contact.create') }}" class="btn btn-outline-info btn-custom">Contacto</a>
         </div>
+        @guest
+            <div class="register-invitation">
+                <p>Ainda não é membro? Considere a possibilidade de tornar-se membro solicitando-o aqui:</p>
+                <a href="{{ route('contact.create') }}?preencher=mensagem" class="btn btn-success btn-custom">Criar Membro</a>
+            </div>
+        @endguest
     </div>
-</body>
-</html>
+@endsection

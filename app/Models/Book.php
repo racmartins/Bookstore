@@ -9,7 +9,7 @@ class Book extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'author_id', 'publisher_id', 'price'];
+    protected $fillable = ['title', 'author_id', 'publisher_id', 'price', 'cover_image', /* outros campos */];
 
     public function author()
     {
@@ -19,6 +19,10 @@ class Book extends Model
     public function publisher()
     {
         return $this->belongsTo(Publisher::class);
+    }
+    public function scopeFeatured($query)
+    {
+        return $query->where('is_featured', true);
     }
 
     // Método auxiliar para formatar o preço

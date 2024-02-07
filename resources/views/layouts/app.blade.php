@@ -27,7 +27,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-primary">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ url('/dashboard') }}">
-                <img src="{{ asset('images/logo.svg') }}" alt="Logo" style="height: 30px;" class="logo">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo" style="height: 30px;" class="logo">
                 <span class="ms-2 text-white" >Bookstore</span>
             </a>
             <!-- Botão de colapso para dispositivos móveis -->
@@ -45,6 +45,22 @@
                     <li class="nav-item">
                         <a class="nav-link mx-3 text-white" href="{{ url('/publishers') }}">Editoras</a>
                     </li>
+                    <!-- Link de gestão de contactos visível apenas para administradores -->
+                    @auth
+                        @if (Auth::user()->role === 'admin')
+                            <li class="nav-item">
+                                <a class="nav-link mx-3 text-white" href="{{ route('contacts.index') }}">Gestão de Contactos</a>
+                            </li>
+                        @endif
+                    @endauth
+                    <!-- Link de gestão de utilizadores visível apenas para administradores -->
+                    @auth
+                        @if (Auth::user()->role === 'admin')
+                            <li class="nav-item">
+                                <a class="nav-link mx-3 text-white" href="{{ route('manage-users.index') }}">Gestão de Utilizadores</a>
+                            </li>
+                        @endif
+                    @endauth
                 </ul>
                 @auth
                     <ul class="navbar-nav ms-auto">
