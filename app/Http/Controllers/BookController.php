@@ -116,4 +116,18 @@ class BookController extends Controller
 
         return back()->with('success', 'Destaque do livro removido com sucesso.');
     }
+    public function markAsFeatured(Book $book)
+    {
+        $book->is_featured = true;
+        $book->save();
+
+        return back()->with('success', 'Livro destacado com sucesso.');
+    }
+    public function removeFeatured(Book $book)
+    {
+        $book->is_featured = false;
+        $book->save();
+
+        return back()->with('success', 'Destaque do livro removido com sucesso.');
+    }
 }

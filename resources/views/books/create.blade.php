@@ -20,8 +20,7 @@
                 </div>
             @endif
 
-            {{-- Atenção: Formulário atualizado para suportar upload de arquivos --}}
-            <form action="{{ route('books.store') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+            <form action="{{ route('books.store') }}" method="POST" class="needs-validation" novalidate>
                 @csrf
 
                 <div class="mb-3">
@@ -66,15 +65,6 @@
                     </div>
                 </div>
 
-                {{-- Campo adicional para imagem de capa --}}
-                <div class="mb-3">
-                    <label for="cover_image" class="form-label">Imagem de Capa</label>
-                    <input type="file" class="form-control" id="cover_image" name="cover_image">
-                    <div class="invalid-feedback">
-                        Por favor, forneça uma imagem de capa válida.
-                    </div>
-                </div>
-
                 <button type="submit" class="btn btn-primary">Adicionar Livro</button>
             </form>
         </div>
@@ -83,20 +73,29 @@
 
 @push('scripts')
     <script>
-        // JavaScript para desativar o envio do formulário se houver campos inválidos
+        // Exemplo de JavaScript para desativar o envio de formulários se houver campos inválidos
         (function () {
-            'use strict';
-            var forms = document.querySelectorAll('.needs-validation');
-            Array.prototype.slice.call(forms).forEach(function (form) {
-                form.addEventListener('submit', function (event) {
-                    if (!form.checkValidity()) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    form.classList.add('was-validated');
-                }, false);
-            });
-        })();
+            'use strict'
+
+            // Buscar todos os formulários aos quais queremos aplicar estilos de validação personalizados do Bootstrap
+            var forms = document.querySelectorAll('.needs-validation')
+
+            // Fazer um loop sobre eles e evitar o envio
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
     </script>
 @endpush
 @endsection
+
+
+
