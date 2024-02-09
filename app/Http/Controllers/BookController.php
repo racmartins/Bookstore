@@ -12,7 +12,19 @@ class BookController extends Controller
 {
     public function index()
     {
-        $books = Book::with(['author', 'publisher'])->paginate(15); // Carrega os livros com seus autores e editoras relacionados
+        // Carrega os livros com as suas avaliações, autores e editoras relacionados
+        $books = Book::with(['reviews.user', 'author', 'publisher'])->paginate(15);
+    
+        // Para cada livro, calcula a avaliação média e determina o nome do último avaliador
+        $books->each(function ($book) {
+            // Calcula a avaliação média
+            $book->average_rating = $book->reviews->avg('rating') ?? 'N/A';
+    
+            // Determina o nome do último utilizador que avaliou, se houver
+            $lastReview = $book->reviews->sortByDesc('created_at')->first();
+            $book->last_reviewer_name = $lastReview ? $lastReview->user->name : 'N/A';
+        });
+    
         return view('books.index', compact('books'));
     }
 
@@ -27,9 +39,11 @@ class BookController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|max:255',
+            'description' => 'required|string', // Adiciona uma validação para o campo de descrição
             'author_id' => 'required|exists:authors,id',
             'publisher_id' => 'required|exists:publishers,id',
             'price' => 'required|numeric',
+            'is_featured' => 'sometimes|boolean', // Adiciona uma validação para um campo booleano de destaque
             'cover_image' => 'sometimes|file|image|max:5000',
         ]);
 
@@ -58,9 +72,11 @@ class BookController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|max:255',
+            'description' => 'required|string', // Adiciona uma validação para o campo de descrição
             'author_id' => 'required|exists:authors,id',
             'publisher_id' => 'required|exists:publishers,id',
             'price' => 'required|numeric',
+            'is_featured' => 'sometimes|boolean', // Adiciona uma validação para um campo booleano de destaque
             'cover_image' => 'sometimes|file|image|max:5000',
         ]);
 
@@ -87,35 +103,7 @@ class BookController extends Controller
         $book->delete();
         return back()->with('success', 'Livro removido com sucesso.');
     }
-
-    public function markAsFeatured(Book $book)
-    {
-        $book->is_featured = true;
-        $book->save();
-
-        return back()->with('success', 'Livro destacado com sucesso.');
-    }
-    public function removeFeatured(Book $book)
-    {
-        $book->is_featured = false;
-        $book->save();
-
-        return back()->with('success', 'Destaque do livro removido com sucesso.');
-    }
-    public function markAsFeatured(Book $book)
-    {
-        $book->is_featured = true;
-        $book->save();
-
-        return back()->with('success', 'Livro destacado com sucesso.');
-    }
-    public function removeFeatured(Book $book)
-    {
-        $book->is_featured = false;
-        $book->save();
-
-        return back()->with('success', 'Destaque do livro removido com sucesso.');
-    }
+    
     public function markAsFeatured(Book $book)
     {
         $book->is_featured = true;

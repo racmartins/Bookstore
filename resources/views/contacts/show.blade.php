@@ -3,10 +3,10 @@
 
 @section('content')
 <div class="container">
-    <h1>Detalhes do Contato</h1>
+    <h1>Detalhes do Contacto</h1>
     <div class="card">
         <div class="card-header">
-            Detalhes do Contato
+            Detalhes do Contacto
         </div>
         <div class="card-body">
             <h5 class="card-title">{{ $contact->name }}</h5>

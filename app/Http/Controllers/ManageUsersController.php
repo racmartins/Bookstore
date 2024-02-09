@@ -35,6 +35,9 @@ class ManageUsersController extends Controller
             'password' => 'required',
         ]);
 
+        // Criptografar a senha antes de guardar
+        $validatedData['password'] = bcrypt($validatedData['password']);
+
         User::create($validatedData);
 
         return redirect()->route('manage-users.index');
@@ -71,8 +74,17 @@ class ManageUsersController extends Controller
         $validatedData = $request->validate([
          'name' => 'required|max:255',
          'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+         'password' => 'nullable|min:6',
          // Inclua outras validações conforme necessário
         ]);
+
+        // Verifica se a senha foi fornecida e criptografa
+        if ($request->filled('password')) {
+            $validatedData['password'] = bcrypt($request->password);
+        } else {
+            // Remove a senha dos dados validados para não tentar atualizar com valor nulo
+            unset($validatedData['password']);
+        }
 
         // Atualização do utilizador
         $user->update($validatedData);

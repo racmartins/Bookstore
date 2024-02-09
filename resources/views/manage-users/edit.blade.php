@@ -24,6 +24,13 @@
                         </div>
 
                         {{-- Aqui pode adicionar campos adicionais conforme necessário --}}
+                <!-- Campo para editar a senha -->
+                <div class="mb-3">
+                    <label for="password" class="form-label">Nova Senha:</label>
+                    <input type="password" class="form-control" id="password" name="password">
+                    <small class="text-muted">Deixe em branco para não alterar a senha.</small>
+                </div>
+
 
                         <div class="d-flex justify-content-between">
                             <button type="submit" class="btn btn-success">Atualizar</button>

@@ -7,6 +7,7 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\ManageUsersController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FeaturedBooksController;
+use App\Http\Controllers\ReviewController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -65,4 +66,9 @@ Route::middleware(['auth'])->group(function () {
 
     // Rotas de Editoras
     Route::resource('publishers', PublisherController::class);
+
+    // Rotas de Reviews
+    Route::get('/books/{book}/reviews/create', [ReviewController::class, 'create'])->name('reviews.create')->middleware('auth');
+    Route::post('/books/{book}/reviews', [ReviewController::class,'store'])->name('reviews.store')->middleware('auth');
+
 });

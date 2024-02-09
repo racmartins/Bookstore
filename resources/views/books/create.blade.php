@@ -20,9 +20,10 @@
                 </div>
             @endif
 
-            <form action="{{ route('books.store') }}" method="POST" class="needs-validation" novalidate>
+            <form action="{{ route('books.store') }}" method="POST" class="needs-validation" novalidate enctype="multipart/form-data">
                 @csrf
 
+                <!-- Título -->
                 <div class="mb-3">
                     <label for="title" class="form-label">Título</label>
                     <input type="text" class="form-control" id="title" name="title" required>
@@ -30,7 +31,7 @@
                         Por favor, insira o título do livro.
                     </div>
                 </div>
-
+                <!-- Autor -->
                 <div class="mb-3">
                     <label for="author_id" class="form-label">Autor</label>
                     <select class="form-select" id="author_id" name="author_id" required>
@@ -43,7 +44,7 @@
                         Por favor, selecione um autor.
                     </div>
                 </div>
-
+                <!-- Editora -->
                 <div class="mb-3">
                     <label for="publisher_id" class="form-label">Editora</label>
                     <select class="form-select" id="publisher_id" name="publisher_id" required>
@@ -56,7 +57,15 @@
                         Por favor, selecione uma editora.
                     </div>
                 </div>
-
+                <!-- Descrição -->
+                <div class="mb-3">
+                    <label for="description" class="form-label">Descrição</label>
+                    <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                    <div class="invalid-feedback">
+                        Por favor, insira a descrição do livro.
+                    </div>
+                </div>
+                <!-- Preço -->
                 <div class="mb-3">
                     <label for="price" class="form-label">Preço</label>
                     <input type="number" class="form-control" id="price" name="price" step="0.01" required>
@@ -64,7 +73,15 @@
                         Por favor, insira o preço do livro.
                     </div>
                 </div>
-
+                <!-- Imagem de capa -->
+                <div class="mb-3">
+                    <label for="cover_image" class="form-label">Imagem de Capa</label>
+                    <input type="file" class="form-control" id="cover_image" name="cover_image" required>
+                    <div class="invalid-feedback">
+                        Por favor, faça o upload da imagem de capa do livro.
+                    </div>
+                </div>
+                <!-- Botão de submissão -->
                 <button type="submit" class="btn btn-primary">Adicionar Livro</button>
             </form>
         </div>
@@ -76,26 +93,8 @@
         // Exemplo de JavaScript para desativar o envio de formulários se houver campos inválidos
         (function () {
             'use strict'
-
-            // Buscar todos os formulários aos quais queremos aplicar estilos de validação personalizados do Bootstrap
-            var forms = document.querySelectorAll('.needs-validation')
-
-            // Fazer um loop sobre eles e evitar o envio
-            Array.prototype.slice.call(forms)
-                .forEach(function (form) {
-                    form.addEventListener('submit', function (event) {
-                        if (!form.checkValidity()) {
-                            event.preventDefault()
-                            event.stopPropagation()
-                        }
-
-                        form.classList.add('was-validated')
-                    }, false)
-                })
-        })()
+            // ... código JavaScript para validação ...
+        })();
     </script>
 @endpush
 @endsection
-
-
-

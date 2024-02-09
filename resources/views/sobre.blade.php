@@ -35,7 +35,7 @@
 
             <div class="text-center mt-5">
                 <a href="/" class="btn btn-lg btn-primary">Voltar à Página Inicial</a>
-                <a href="{{ route('login') }}" class="btn btn-lg btn-success">Solicitar Acesso</a>
+                <a href="{{ route('contact.create') }}?preencher=mensagem" class="btn btn-lg btn-success">Solicitar Acesso</a>
             </div>
         </div>
     </div>
