@@ -9,6 +9,14 @@
         <a href="{{ route('books.create') }}" class="btn btn-primary mb-4">Adicionar Novo Livro</a>
     @endif
 
+    {{-- Formulário de Busca --}}
+    <form action="{{ route('books.index') }}" method="GET" class="mb-4">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" name="search" placeholder="Buscar por título, autor, editora..." aria-label="Buscar por título, autor, editora..." aria-describedby="button-addon2">
+            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Buscar</button>
+        </div>
+    </form>
+
     <div class="row row-cols-1 row-cols-md-3 g-4">
         @foreach($books as $book)
             <div class="col">

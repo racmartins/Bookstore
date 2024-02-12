@@ -57,9 +57,6 @@
                         <a class="nav-link" href="{{ url('/dashboard') }}">Dashboard</a>
                     @else
                         <a class="nav-link" href="{{ route('login') }}">Login</a>
-                        @if(Route::has('register'))
-                            <a class="nav-link" href="{{ route('register') }}">Registar</a>
-                        @endif
                     @endauth
                 </div>
             </div>

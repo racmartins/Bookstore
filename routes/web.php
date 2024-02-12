@@ -60,6 +60,8 @@ Route::middleware(['auth'])->group(function () {
 
     // Rotas de Livros
     Route::resource('books', BookController::class);
+    Route::get('/books/busca', [LivroController::class,'busca'])->name('books.busca');
+
 
     // Rotas de Autores
     Route::resource('authors', AuthorController::class);
