@@ -5,7 +5,7 @@
 @section('content')
 <div class="container py-4">
     <div class="card">
-        <div class="card-header bg-primary text-white">
+        <div class="card-header bg-success text-white">
             <h4 class="mb-0">Editar Livro: {{ $book->title }}</h4>
         </div>
         <div class="card-body">
@@ -81,7 +81,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Atualizar Livro</button>
+                <button type="submit" class="btn btn-success">Atualizar Livro</button>
                 <a href="{{ route('books.index') }}" class="btn btn-secondary">Voltar para a lista de livros</a>
             </form>
         </div>

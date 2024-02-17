@@ -6,52 +6,80 @@
     body, html {
         height: 100%;
         margin: 0;
+        background-color: #e9ecef; /* Altera a cor de fundo da página */
     }
 
     nav.navbar {
-        background-color: #fff;
+        background-color: #007bff; /* Cor primária mais vibrante */
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .form-signin {
-        max-width: 400px; /* Reduz a largura máxima para uma aparência mais compacta */
-        padding: 15px; /* Reduz o espaçamento interno */
-        margin: auto; /* Centraliza o formulário na página */
-        margin-top: 50px; /* Reduz a margem superior para menos espaço acima do formulário */
-        background-color: #f8f9fa;
-        border-radius: 0.5rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        padding: 25px; /* Aumenta o espaçamento interno para mais conforto */
+        margin: 100px auto; /* Aumenta a margem superior para centralizar verticalmente */
+        background-color: #fff;
+        border-radius: 1rem; /* Bordas mais arredondadas */
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); /* Sombra mais profunda para efeito 3D */
     }
 
     .form-label-group {
-        margin-bottom: 10px; /* Reduz o espaçamento entre os campos */
+        position: relative;
+        margin-bottom: 20px; /* Aumenta o espaçamento entre os campos */
+    }
+
+    .form-label-group > label,
+    .form-label-group > .form-control {
+        text-align: left; /* Alinha o texto à esquerda */
     }
 
     .form-label-group input,
     .form-label-group label {
-        padding: .5rem; /* Reduz o espaçamento interno */
+        height: 50px; /* Aumenta a altura para melhor acessibilidade */
+        border-radius: .5rem; /* Bordas arredondadas */
     }
 
-    .btn-custom {
-        font-weight: 600;
+    .btn-aceder {
+        font-size: 18px; /* Tamanho de fonte maior */
+        font-weight: bold;
         color: #fff;
-        background-color: #007bff;
-        border-color: #007bff;
+        background-color: #28a745; /* verde Bootstrap */
+        border-color: #28a745; /* Cor da borda */
+        padding: .75rem 1.5rem; /* Espaçamento interno maior */
+        border-radius: .5rem; /* Bordas arredondadas */
+        width: 100%; /* Faz o botão ocupar a largura total */
     }
 
-    .btn-custom:hover {
-        background-color: #0056b3;
-        border-color: #004085;
+    .btn-aceder:hover {
+        background-color: #218838; /* Verde um pouco mais escuro para o hover */
+        border-color: #1e7e34; /* Cor da borda para o hover */
     }
 
     .text-sm {
+        display: block; /* Faz o texto ocupar a própria linha */
+        margin-top: .5rem; /* Espaçamento superior */
         color: #6c757d;
+        text-align: right; /* Alinha o texto à direita */
     }
 
     .text-sm:hover {
         color: #0056b3;
     }
+
+    /* Estilo para a caixa de "Lembrar de mim" */
+    .form-check {
+        margin-top: -1rem; /* Ajusta o espaçamento para cima */
+    }
+
+    .form-check-label {
+        margin-left: .5rem;
+    }
+
+    .form-check-input {
+        accent-color: #007bff; /* Cor do checkbox */
+    }
 </style>
+
 @endsection
 
 
@@ -85,11 +113,11 @@
                         </div>
 
                         <!-- Remember Me -->
-                        <div class="block mt-4">
-                            <label for="remember_me" class="inline-flex items-center">
-                                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                                <span class="ms-2 text-sm text-gray-600">{{ __('Lembrar de mim') }}</span>
-                            </label>
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="form-check">
+                                <input id="remember_me" type="checkbox" class="form-check-input" name="remember">
+                                <label for="remember_me" class="form-check-label ms-2">{{ __('Lembrar de mim') }}</label>
+                            </div>
                         </div>
 
                         <div class="flex items-center justify-end mt-4">
@@ -99,7 +127,7 @@
                                 </a>
                             @endif
 
-                            <x-primary-button class="btn-custom ms-3">
+                            <x-primary-button class="btn-aceder ms-3">
                                 {{ __('Aceder') }}
                             </x-primary-button>
                         </div>

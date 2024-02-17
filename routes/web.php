@@ -8,6 +8,7 @@ use App\Http\Controllers\ManageUsersController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FeaturedBooksController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\EventController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +25,11 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 
 Route::get('/featured-books', [FeaturedBooksController::class,'featuredBooks'])->name('books.featured');
 
+Route::get('/eventos', [EventController::class, 'publicEvents'])->name('eventos');
+
+// Rota para o formulário de inscrição num evento específico
+Route::get('{id}/inscription', [EventController::class, 'showInscriptionForm'])->name('inscription');
+Route::post('/events/{id}/subscribe', [EventController::class, 'subscribe'])->name('events.subscribe');
 
 // Autenticação
 require __DIR__.'/auth.php';
@@ -72,5 +78,11 @@ Route::middleware(['auth'])->group(function () {
     // Rotas de Reviews
     Route::get('/books/{book}/reviews/create', [ReviewController::class, 'create'])->name('reviews.create')->middleware('auth');
     Route::post('/books/{book}/reviews', [ReviewController::class,'store'])->name('reviews.store')->middleware('auth');
+
+    //Rotas de eventos
+    Route::resource('events', EventController::class)->middleware('auth');
+
+    //Rotas de Inscrição em Eventos
+    Route::post('/events/{event}/subscribe', [EventController::class, 'subscribe'])->name('events.subscribe');
 
 });

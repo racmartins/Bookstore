@@ -67,7 +67,7 @@ return [
 
         'sendmail' => [
             'transport' => 'sendmail',
-            'key' => env('MAILERSEND_API_KEY'),
+            'path' => env('MAIL_SENDMAIL_PATH', '/usr/sbin/sendmail -bs -i'),
         ],
 
         'log' => [

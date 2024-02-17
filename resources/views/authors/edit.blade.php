@@ -7,7 +7,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card shadow">
-                <div class="card-header bg-primary text-white">Editar Autor</div>
+                <div class="card-header bg-success text-white">Editar Autor</div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('authors.update', $author->id) }}">
                         @csrf
@@ -24,7 +24,7 @@
                         </div>
 
                         <div class="d-flex justify-content-between">
-                            <button type="submit" class="btn btn-primary">Atualizar Autor</button>
+                            <button type="submit" class="btn btn-success">Atualizar Autor</button>
                             <a href="{{ route('authors.index') }}" class="btn btn-secondary">Cancelar</a>
                         </div>
                     </form>

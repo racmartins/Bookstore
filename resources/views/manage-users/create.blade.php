@@ -7,7 +7,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card shadow">
-                <div class="card-header bg-primary text-white">Criar Novo Utilizador</div>
+                <div class="card-header bg-success text-white">Criar Novo Utilizador</div>
                 <div class="card-body">
                     <form action="{{ route('manage-users.store') }}" method="post" novalidate>
                         @csrf
@@ -35,7 +35,7 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="submit" class="btn btn-success">Guardar</button>
                         <a href="{{ route('manage-users.index') }}" class="btn btn-secondary">Cancelar</a>
                     </form>
                 </div>

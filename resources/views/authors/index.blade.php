@@ -12,7 +12,7 @@
     @endif
 
     @if (Auth::user()->role == 'admin')
-        <a href="{{ route('authors.create') }}" class="btn btn-primary mb-3">Adicionar Novo Autor</a>
+        <a href="{{ route('authors.create') }}" class="btn btn-success mb-3">Adicionar Novo Autor</a>
     @endif
 
     <div class="row row-cols-1 row-cols-md-3 g-4">

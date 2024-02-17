@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bookstore</title>
+    <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <style>
         .navbar-brand {
             margin-right: 150px; /* Ajuste o valor conforme necessário */
@@ -24,7 +27,7 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-light bg-success">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ url('/dashboard') }}">
                 <img src="{{ asset('images/logo.png') }}" alt="Logo" style="height: 30px;" class="logo">
@@ -36,6 +39,19 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <!-- Botão Área Pública -->
+                    <div class="ms-auto dropdown">
+                        <button class="btn btn-info" type="button" id="publicAreaToggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-globe"></i> Área Pública
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="publicAreaToggle">
+                            <li><a class="dropdown-item" href="{{ route('books.featured') }}">Livros em Destaque</a></li>
+                            <li><a class="dropdown-item" href="/sobre">Sobre Nós</a></li>
+                            <li><a class="dropdown-item" href="{{ route('contact.create') }}">Contacto</a></li>
+                            <li><a class="dropdown-item" href="{{ route('eventos') }}">Eventos Públicos</a></li>
+                            <!-- Adicione outras opções conforme necessário -->
+                        </ul>
+                    </div>
                     <li class="nav-item">
                         <a class="nav-link mx-3 text-white" href="{{ url('/books') }}">Livros</a>
                     </li>
@@ -44,6 +60,10 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link mx-3 text-white" href="{{ url('/publishers') }}">Editoras</a>
+                    </li>
+                    <!-- Novo item de menu para Eventos -->
+                    <li class="nav-item">
+                        <a class="nav-link mx-3 text-white" href="{{ url('/events') }}">Eventos</a>
                     </li>
                     <!-- Link de gestão de contactos visível apenas para administradores -->
                     @auth

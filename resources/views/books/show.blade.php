@@ -5,7 +5,7 @@
 @section('content')
 <div class="container py-4">
     <div class="card">
-        <div class="card-header bg-primary text-white">
+        <div class="card-header bg-success text-white">
             <h4 class="mb-0">Detalhes do Livro</h4>
         </div>
         <div class="card-body">

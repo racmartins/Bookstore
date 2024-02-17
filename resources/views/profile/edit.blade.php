@@ -43,7 +43,7 @@
             @endif
         </div>
 
-        <button type="submit" class="btn btn-primary">Atualizar</button>
+        <button type="submit" class="btn btn-success">Atualizar</button>
     </form>
 </div>
 @endsection

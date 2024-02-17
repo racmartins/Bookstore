@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">Adicionar Nova Editora</div>
+                <div class="card-header bg-success text-white">Adicionar Nova Editora</div>
                 <div class="card-body">
                     <form action="{{ route('publishers.store') }}" method="post">
                         @csrf
@@ -20,7 +20,7 @@
                         </div>
 
                         <div class="d-flex justify-content-between">
-                            <button type="submit" class="btn btn-primary">Adicionar</button>
+                            <button type="submit" class="btn btn-success">Adicionar</button>
                             <a href="{{ route('publishers.index') }}" class="btn btn-secondary">Cancelar</a>
                         </div>
                     </form>

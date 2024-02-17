@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card shadow">
-                <div class="card-header bg-primary text-white">Criar Novo Autor</div>
+                <div class="card-header bg-success text-white">Criar Novo Autor</div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('authors.store') }}">
                         @csrf
@@ -17,7 +17,7 @@
                             <label for="birth_year" class="form-label">Ano de Nascimento:</label>
                             <input type="number" class="form-control" id="birth_year" name="birth_year" required>
                         </div>
-                        <button type="submit" class="btn btn-primary">Criar Autor</button>
+                        <button type="submit" class="btn btn-success">Criar Autor</button>
                         <a href="{{ route('authors.index') }}" class="btn btn-secondary">Cancelar</a>
                     </form>
                 </div>

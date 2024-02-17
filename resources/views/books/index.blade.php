@@ -6,7 +6,7 @@
 <div class="container py-4">
     <h1 class="mb-4">Livros</h1>
     @if (Auth::user() && Auth::user()->role == 'admin')
-        <a href="{{ route('books.create') }}" class="btn btn-primary mb-4">Adicionar Novo Livro</a>
+        <a href="{{ route('books.create') }}" class="btn btn-success mb-4">Adicionar Novo Livro</a>
     @endif
 
     {{-- Formulário de Busca --}}
@@ -40,7 +40,7 @@
                         <a href="{{ route('books.show', $book) }}" class="btn btn-info btn-sm">Ver</a>
 
                         @if (Auth::check() && Auth::user()->role != 'admin')
-                            <a href="{{ route('reviews.create', $book->id) }}" class="btn btn-primary btn-sm">Avaliar Livro</a>
+                            <a href="{{ route('reviews.create', $book->id) }}" class="btn btn-success btn-sm">Avaliar Livro</a>
                         @endif
 
                         @if (Auth::user() && Auth::user()->role == 'admin')
